@@ -38,10 +38,10 @@ function playRound(playerSelection, computerSelection) {
   if (playerSelection == "rock" && computerSelection == "scissors") {
     return true; 
   }
-  if (playerSelection = "scissors" && computerSelection == "paper") {
+  if (playerSelection == "scissors" && computerSelection == "paper") {
     return true;
   }
-  if (playerSelection = "paper" && computerSelection == "rock") {
+  if (playerSelection == "paper" && computerSelection == "rock") {
     return true;
   }
   
@@ -49,26 +49,42 @@ function playRound(playerSelection, computerSelection) {
 }
 
 function checkGameOver(roundsWon) {
-  return roundsWon >= Math.ceiling(ROUNDS_IN_GAME / 2);
+  return roundsWon >= Math.ceil(ROUNDS_IN_GAME / 2);
 }
 
 function game() {
   initGameVariables();
   while(winner === false && rounds < ROUNDS_IN_GAME) {
     getPlayerInput();
+	while (playerSelection === null || playerSelection == "") {
+		console.log(`You did not choose an option.`);
+		getPlayerInput();
+	}
     let computerSelection = computerPlay();
     let didPlayerWin = playRound(playerSelection, computerSelection);
     
     if (didPlayerWin !== null) {
-      didPlayerWin ? playerRoundsWon++ : computerRoundsWon++;
+      if (didPlayerWin) {
+		playerRoundsWon++;
+		console.log(`You win the round. ${playerSelection} beats ${computerSelection}.`);
+	  } else {
+		computerRoundsWon++;
+		console.log(`You lose the round. ${computerSelection} beats ${playerSelection}.`);
+	  }
       rounds++;
-    }
+    } else {
+	  console.log(`There was a draw this round.`);
+	}
     
     if (checkGameOver(playerRoundsWon)) {
-      return "You win!" 
+      console.log("You win!");
+	  break;
     }
     if (checkGameOver(computerRoundsWon)) {
-      return "You lose."
+      console.log("You lose.");
+	  break;
     }
   }
 }
+
+game();
